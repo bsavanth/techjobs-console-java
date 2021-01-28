@@ -1,8 +1,11 @@
 package org.launchcode.techjobs.console;
 
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -45,6 +48,8 @@ public class TechJobs {
 
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
+
+
                     // Print list of skills, employers, etc
                     for (String item : results) {
                         System.out.println(item);
@@ -61,7 +66,11 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+
+
+                    printJobs(JobData.searchAll(searchTerm));
+
+
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -79,10 +88,13 @@ public class TechJobs {
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
         Integer i = 0;
+
+
         for (String choiceKey : choices.keySet()) {
             choiceKeys[i] = choiceKey;
             i++;
         }
+
 
         do {
 
@@ -93,8 +105,10 @@ public class TechJobs {
                 System.out.println("" + j + " - " + choices.get(choiceKeys[j]));
             }
 
-            choiceIdx = in.nextInt();
-            in.nextLine();
+
+                choiceIdx = in.nextInt();
+                in.nextLine();
+
 
             // Validate user's input
             if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
@@ -111,6 +125,19 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+
+
+        for ( HashMap<String, String> column :someJobs ){
+
+            System.out.println("*****");
+            for (String name: column.keySet()){
+                String key = name;
+                String value = column.get(name).toString();
+                System.out.println(key + " : " + value);
+            }
+            System.out.println("*****");
+
+            System.out.println();
+        }
     }
 }

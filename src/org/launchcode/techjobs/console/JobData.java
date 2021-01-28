@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -20,6 +18,11 @@ public class JobData {
     private static Boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
+
+    public JobData()
+    {
+
+    }
 
     /**
      * Fetch list of all values from loaded data,
@@ -35,6 +38,8 @@ public class JobData {
 
         ArrayList<String> values = new ArrayList<>();
 
+
+
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(field);
 
@@ -43,7 +48,35 @@ public class JobData {
             }
         }
 
+
+        Collections.sort(values);
+
         return values;
+    }
+
+    public static ArrayList<HashMap<String, String>> searchAll(String searchterm) {
+
+        // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> values = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+
+            for (String name: row.keySet()){
+                String key = name;
+                String value = row.get(name).toString();
+
+                if (value.toLowerCase(Locale.ROOT).contains(searchterm.toLowerCase(Locale.ROOT))) {
+                    values.add(row);
+                }
+
+            }
+
+        }
+
+        return values;
+
     }
 
     public static ArrayList<HashMap<String, String>> findAll() {
@@ -51,7 +84,8 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        return allJobs;
+        ArrayList cloned = new ArrayList(allJobs);
+        return cloned;
     }
 
     /**
@@ -74,9 +108,9 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase(Locale.ROOT);
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(value.toLowerCase(Locale.ROOT))) {
                 jobs.add(row);
             }
         }
